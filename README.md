@@ -24,7 +24,7 @@ Configure the following parameters in settings.json
 
 `(sudo) pip install -r requirements.txt`
 
-3) Puth manage_torrents somewhere on your PATH
+3) Puth manage_transmission somewhere on your PATH
 
 4) Configure via ENV vars:
 
@@ -43,7 +43,7 @@ Configure the following parameters in settings.json
 
 ### Invocation
 
-`manage_torrents --help`
+`manage_transmission --help`
 
 Terminology:
 
@@ -64,4 +64,4 @@ UNMOUNT_COMMAND = "fusermount -u /mnt"
 
 Example crontab to continuously sync torrents (remember to append your path else manage_torrent wont find the right shell commands'):
 
-`* * * * * PATH=/usr/bin /usr/bin/manage_torrents sync_all`
+`* * * * * PATH=/usr/bin /usr/bin/manage_transmission sync_all`
