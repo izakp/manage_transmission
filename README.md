@@ -62,6 +62,6 @@ MOUNT_COMMAND = "google-drive-ocamlfuse -verbose /mnt"
 UNMOUNT_COMMAND = "fusermount -u /mnt"
 ```
 
-Example crontab to continuously sync torrents (remember to append your path else manage_torrent wont find the right shell commands'):
+Example crontab to continuously sync torrents (remember to append your path else manage_transmission wont find the right shell commands'):
 
 `* * * * * PATH=/usr/bin /usr/bin/manage_transmission sync_all`
