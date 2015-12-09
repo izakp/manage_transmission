@@ -16,19 +16,15 @@ import click
 
 from pid import PidFile, PidFileError
 
-# User-defined constants - change to reflect your system
+ARCHIVE_HOME = os.environ.get('ARCHIVE_HOME', "/mnt")
 
-ARCHIVE_HOME = "~/archive"
+MOUNT_COMMAND = os.environ.get('MT_MOUNT_COMMAND')
+UNMOUNT_COMMAND = os.environ.get('MT_UNMOUNT_COMMAND')
 
-MOUNT_COMMAND = None
-UNMOUNT_COMMAND = None
+DOWNLOADS_HOME = os.environ.get("DOWNLOADS_HOME", "/home/debian-transmission/downloads/")
 
-DOWNLOADS_HOME = "/home/debian-transmission/downloads/"
-
-TRANSMISSION_UNAME = "transmission"
-TRANSMISSION_PWD = "transmission"
-
-# Static constants - DO NOT CHANGE
+TRANSMISSION_UNAME = os.environ.get("TRANSMISSION_UNAME", "transmission")
+TRANSMISSION_PWD = os.environ.get("TRANSMISSION_PWD", "transmission")
 
 PROGRAM_NAME = "manage_transmission"
 
@@ -210,19 +206,31 @@ def main():
 
 @main.command()
 def info():
+    """
+    Get info on all completed torrents
+    """
     manager.list_torrents()
 
 @main.command()
 def mount():
+    """
+    Run MOUNT_COMMAND, if defined
+    """
     mount_command()
 
 @main.command()
 def unmount():
+    """
+    Run UNMOUNT_COMMAND, if defined
+    """
     unmount_command()
 
 @main.command()
 @click.argument('torrent_ids', nargs=-1, type=click.INT)
 def archive_by_id(torrent_ids):
+    """
+    Archive torrents by a list of ids (see info)
+    """
     torrents_to_archive = manager.prepare_torrents(torrent_ids=torrent_ids)
     if not manager.confirm_archive(torrents_to_archive):
         return
@@ -231,6 +239,9 @@ def archive_by_id(torrent_ids):
 @main.command()
 @click.argument('archive_ratio', type=click.FLOAT)
 def archive_by_ratio(archive_ratio):
+    """
+    Archive torrents that fall below a given seed ratio
+    """
     torrents_to_archive = manager.prepare_torrents(archive_ratio=archive_ratio)
     if not manager.confirm_archive(torrents_to_archive):
         return
@@ -238,6 +249,9 @@ def archive_by_ratio(archive_ratio):
 
 @main.command()
 def archive_all():
+    """
+    Archive all torrents
+    """
     println("Archive all. Are you sure?")
     confirm = raw_input('Y/n: ')
     if confirm != "Y":
@@ -248,17 +262,26 @@ def archive_all():
 @main.command()
 @click.argument('torrent_ids', nargs=-1, type=click.INT)
 def sync_by_id(torrent_ids):
+    """
+    Sync torrents by a list of ids (see info)
+    """
     torrents_to_sync = manager.prepare_torrents(torrent_ids=torrent_ids)
     manager.sync_torrents(torrents_to_sync)
 
 @main.command()
 def sync_all():
+    """
+    Sync all torrents
+    """
     torrents_to_sync = manager.prepare_torrents(getemall=True)
     manager.sync_torrents(torrents_to_sync)
 
 @main.command()
 @click.argument('torrent_id', type=click.INT)
 def delete_from_archive(torrent_id):
+    """
+    Delete torrents from the archive (to then re-sync)
+    """
     torrents_to_delete = manager.prepare_torrents(torrent_ids=[torrent_id])
     manager.delete_archived_torrents(torrents_to_delete)
 
